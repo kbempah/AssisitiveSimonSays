@@ -251,6 +251,16 @@ void startSinglePlayerMode() {
   Serial.println("Exiting startSinglePlayerMode()");
 }
 
+void promptUserForInput(void) {
+  if (level == 1) {
+    Serial.println("Enter first input");
+    // dfPlayer.play(); // insert track to prompt user to enter first color
+  } else {
+    Serial.println("Enter input");
+    // dfPlayer.play(); // insert track number to prompt for regular sequence.
+  }
+}
+
 void startMultiPlayerMode() {
   Serial.println("Entering startMultiPlayerMode()");
   int extension;
