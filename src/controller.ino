@@ -250,6 +250,14 @@ void startSinglePlayerMode() {
 
   Serial.println("Exiting startSinglePlayerMode()");
 }
+void initializeGame() {
+  Serial.println("Entering initializeGame()");
+  const difficultyconfig_t &config = difficultySettings[static_cast<int>(currentDifficulty)];
+  retriesLeft = config.initialRetries;
+  speed = config.speed;
+  triggerTimeout = config.triggerTimeout;
+  Serial.println("Exiting initializeGame()");
+}
 void resetGameState() {
   Serial.println("Entering resetGameState()");
   level = 1;
