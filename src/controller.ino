@@ -211,3 +211,30 @@ datapacket_t getPacket(void) {
 
   return temp;
 }
+void startSinglePlayerMode() {
+  Serial.println("Entering startSinglePlayerMode()");
+  input_t status;
+
+  /*
+  Ready 
+  Set
+  Go
+  */
+  
+  while (!gameOver) {
+    Serial.print("Starting level "); Serial.print(level); Serial.print(" in "); Serial.print(difficultyNames[(int)currentDifficulty]); Serial.println(" difficulty.");
+    displaySequence();
+    status = handleInputSP();
+    if (status == INPUT_VALID) {
+      rightSequence();
+    } else if (status == INPUT_TIMEOUT) {
+      Serial.println("Wait for input timed out");
+      wrongSequence();
+    } else { // must be bad input
+      Serial.println("Incorrect input");
+      wrongSequence();
+    }
+  }
+
+  Serial.println("Exiting startSinglePlayerMode()");
+}
