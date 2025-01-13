@@ -211,6 +211,18 @@ datapacket_t getPacket(void) {
 
   return temp;
 }
+
+void displayWaitSequence() {
+  for (int i = 0; i < NUM_LEDS; ++i) {
+    analogWrite(ledPins[i], brightnessLevels[brightnessIndex]);  // max brightness
+  }
+  delay(1000);
+  for (int i = 0; i < NUM_LEDS; ++i) {
+    analogWrite(ledPins[i], 0);
+  }
+  delay(1000);
+}
+
 void startSinglePlayerMode() {
   Serial.println("Entering startSinglePlayerMode()");
   input_t status;
