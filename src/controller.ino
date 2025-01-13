@@ -291,6 +291,29 @@ void startMultiPlayerMode() {
   Serial.println("Exiting startMultiPlayerMode()");
 }
 
+bool verifyRoundToken(datapacket_t roundToken) {
+  Serial.println("Entering verifyRoundToken()");
+  bool validToken = false;
+
+  if (roundToken.isValid == 0) {
+    validToken = true;
+    level = roundToken.nextLevel;
+    userSequence[userInputIndex++] = roundToken.nextSequenceInput;
+    for (int i = 0; i < level - 1; i++) {
+      Serial.print(userSequence[i]);
+      Serial.print(" ");
+    }
+    Serial.println();
+    Serial.println("Game state updated");
+  }
+
+  Serial.print("Current level is: ");
+  Serial.println(level);
+
+  Serial.println("Exiting verifyRoundToken()");
+  return validToken;
+}
+
 void initializeGame() {
   Serial.println("Entering initializeGame()");
   const difficultyconfig_t &config = difficultySettings[static_cast<int>(currentDifficulty)];
