@@ -55,9 +55,29 @@ const int DIFFICULTY_SELECTION_PIN = A0;  // Slide switch for difficulty selecti
 const int CE_PIN = 8;
 const int CSN_PIN = 10;
 
+difficulty_t currentDifficulty;
+int retriesLeft;
+int level = 1;
+int speed;
+unsigned long triggerTimeout;
+int sequence[MAX_LVL];      // Max level = 100; stores the LED sequence
+int userSequence[MAX_LVL];
+int userInputIndex = 0;     // Tracks user's progress in the sequence for multiplayer
+bool radio = 1;             // uses address[1] to transmit to peripheral device
+
+volatile int brightnessIndex = 2;   // Starting brightness index
+volatile bool gameStarted = false;  // Flag to track if the game has started
+volatile bool gameOver = true;      // Flag to signal game end
+volatile bool startPressed = false;
+volatile bool resetQueued = false;
+
+bool singlePlayerMode;  // Game mode: true for single-player, false for multiplayer
+bool multiPlayerMode;
+
 const int ledPins[] = { 5, 9, 6, 3 };                // 0 red, 1 blue, 2 green, 3 yellow
 const int brightnessLevels[] = { 0x55, 0xAA, 0xFF };  // Define brightness levels (85, 170, 255)
 const uint8_t address[][6] = { "1Node", "2Node" };
+// int buttonPins[] = { A2, A3, A4, A5 };  // Analog pins for the buttons corresponding to the LEDs -> 0 red, 1 blue, 2 green, 3 yellow
 const int buttonPins[] = { 0x10, 0x40, 0x20, 0x80 };
 const int buttonTones[] = { 1, 2, 3, 4 };     // tones for button presses
 
