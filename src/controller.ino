@@ -250,6 +250,37 @@ void startSinglePlayerMode() {
 
   Serial.println("Exiting startSinglePlayerMode()");
 }
+
+void startMultiPlayerMode() {
+  Serial.println("Entering startMultiPlayerMode()");
+  int extension;
+  input_t status;  // to handle result of extending sequence
+  bool validToken = true;
+  datapacket_t token;
+
+  while (!gameOver) {
+    if (validToken) {
+      promptUserForInput();  // do this once per round
+      displaySequenceMP();
+      status = handleInputMP(&extension);
+      Serial.print("Extension to sequence ");
+      Serial.println(extension);
+      if (status == INPUT_VALID) { // valid input
+        updatePeripheral(token, 0, extension, level + 1, resetQueued); // advance level for peripheral
+        token = getPacket();
+        validToken = verifyRoundToken(token);
+      } else { // timeout or invalid input
+        updatePeripheral(token, -1, extension, level, resetQueued); // we don't care about level here because game is ending anyway
+        resetGameState();
+      }
+    } else {  // we are here because isValid was not 0 (assuming it's -1)
+      // rightSequence(); // right sequence for you but the game ends now
+      resetGameState();
+    }
+  }
+  Serial.println("Exiting startMultiPlayerMode()");
+}
+
 void initializeGame() {
   Serial.println("Entering initializeGame()");
   const difficultyconfig_t &config = difficultySettings[static_cast<int>(currentDifficulty)];
