@@ -79,6 +79,24 @@ void initializeNRFModule(void) {
   controller.stopListening();
 }
 
+void initializeGPIOModule(void) {
+  for (int i = 0; i < NUM_LEDS; ++i) {
+    pinMode(ledPins[i], OUTPUT);  // Set all LED pins as outputs
+  }
+
+  for (int i = 0; i < NUM_LEDS; ++i) {
+    pinMode(buttonPins[i], INPUT_PULLUP);
+  }
+
+  // Set up button pin as input with pull-up resistor
+  pinMode(INTERRUPT_PIN, INPUT_PULLUP);      // initially high
+  pinMode(MODE_SELECT_PIN, INPUT);           // Game mode slide switch
+  pinMode(DIFFICULTY_SELECTION_PIN, INPUT);  // Difficulty level slide switch
+
+  // Attach interrupt to the button pin
+  attachInterrupt(digitalPinToInterrupt(INTERRUPT_PIN), handleStartReset, FALLING);
+}
+
 void initializeDFPlayerModule(void) {
   if (!dfPlayer.begin(softwareSerial)) {
     Serial.println("Could not initialize dfplayer");
