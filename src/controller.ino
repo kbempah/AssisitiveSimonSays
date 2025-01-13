@@ -36,6 +36,14 @@ typedef struct difficultyconfig {
   int speed;                          // Delay between LEDs in seconds
   unsigned long triggerTimeout;  // Timeout in milliseconds
 } difficultyconfig_t;
+
+// Difficulty settings defaults
+const difficultyconfig_t difficultySettings[] = {
+  { 99, 4000, 8000 },  // EASY: unlimited retries, 2s speed, 8s timeout
+  { 3, 1500, 5000 },   // MEDIUM: 3 retries, 1.5s speed, 5s timeout
+  { 0, 1000, 4000 }    // HARD: 0 retries, 1s speed, 4s timeout
+};
+
 const int NUM_LEDS = 4;
 const int MAX_LVL = 100;
 const int NUM_BRIGHTNESS_LVL = 3;
@@ -53,3 +61,14 @@ const uint8_t address[][6] = { "1Node", "2Node" };
 const int buttonPins[] = { 0x10, 0x40, 0x20, 0x80 };
 const int buttonTones[] = { 1, 2, 3, 4 };     // tones for button presses
 
+SoftwareSerial softwareSerial(/*rx =*/0, /*tx =*/1);
+DFRobotDFPlayerMini dfPlayer;
+
+void initializeDFPlayerModule(void) {
+  if (!dfPlayer.begin(softwareSerial)) {
+    Serial.println("Could not initialize dfplayer");
+    while (true) {} // hold an infinite loop to prevent progress from here.
+  }
+  set initial volume
+  dfPlayer.volume(10);
+}
