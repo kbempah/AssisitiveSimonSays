@@ -258,6 +258,17 @@ void initializeGame() {
   triggerTimeout = config.triggerTimeout;
   Serial.println("Exiting initializeGame()");
 }
+
+void generateSequence(void) {
+  Serial.println("Entering generateSequence()");
+  randomSeed(millis());
+  for (int i = 0; i < MAX_LVL; ++i) { // fill up all the possible moves for user, not a fan on this because it can get boring very easily
+    // sequence[i] = random(0, NUM_LEDS);  // Random LED index
+    sequence[i] = 2; // force green LED
+  }
+  Serial.println("Exiting generateSequence()");
+}
+
 void resetGameState() {
   Serial.println("Entering resetGameState()");
   level = 1;
