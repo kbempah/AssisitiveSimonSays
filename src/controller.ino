@@ -64,6 +64,21 @@ const int buttonTones[] = { 1, 2, 3, 4 };     // tones for button presses
 SoftwareSerial softwareSerial(/*rx =*/0, /*tx =*/1);
 DFRobotDFPlayerMini dfPlayer;
 
+RF24 controller(CE_PIN, CSN_PIN);
+
+void initializeNRFModule(void) {
+  if (!controller.begin()) {
+    Serial.println("Could not initialize controller radio");
+    while (true) {}  // hold an infinite loop to prevent progress from here.
+  }
+  controller.setPALevel(RF24_PA_LOW);
+  // set the TX address of the RX node into the TX pipe
+  controller.openWritingPipe(address[radio]);
+  // set the RX address of the TX node into a RX pipe
+  controller.openReadingPipe(1, address[!radio]);
+  controller.stopListening();
+}
+
 void initializeDFPlayerModule(void) {
   if (!dfPlayer.begin(softwareSerial)) {
     Serial.println("Could not initialize dfplayer");
