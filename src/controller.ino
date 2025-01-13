@@ -135,3 +135,44 @@ void setup() {
   initializeGPIOModule();
 }
 
+void loop() {
+  if (gameOver) {
+    singlePlayerMode = digitalRead(MODE_SELECT_PIN) == LOW;
+    multiPlayerMode = !singlePlayerMode;
+    if (singlePlayerMode) {  // only get difficulty when in single player mode
+      currentDifficulty = getDifficulty();
+    }
+    if (multiPlayerMode) {
+      speed = 1;
+    }
+    gameOver = false;  // because new game started
+  }
+
+  // Serial.println("Before I press start button for singlePlayerMode");
+  if (singlePlayerMode && gameStarted) {  // user has hit start/stop button and game mode is singleplayer
+    initializeGame();
+    generateSequence();
+    startSinglePlayerMode();
+  }
+
+  if (multiPlayerMode && gameStarted && !startPressed) {  // user has hit start button on controller module therefore gameStarted == true
+    startPressed = true;                                  // this way we only go into this loop once
+    bool syncd = false;
+    datapacket_t syn = { -1, -1 };
+    Serial.println("Initiating contact with peripheral module");
+    sendPacket(syn);
+
+    // if here, we successfully talked to receiver, now our turn to receive
+    datapacket_t synack = getPacket();
+    if (synack.isValid == syn.isValid && synack.nextSequenceInput == syn.nextSequenceInput) {
+      Serial.println("SYNACK packet successfully received, moving on");
+      syncd = true;
+    }
+
+    if (syncd) {
+      Serial.println("controller: let the games begin");
+      startMultiPlayerMode();
+    }
+  }
+}
+
