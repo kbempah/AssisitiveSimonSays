@@ -105,3 +105,13 @@ void initializeDFPlayerModule(void) {
   set initial volume
   dfPlayer.volume(10);
 }
+
+void setup() {
+  softwareSerial.begin(9600);
+  Serial.begin(115200);
+
+  initializeDFPlayerModule();	
+  initializeNRFModule();
+  initializeGPIOModule();
+}
+
