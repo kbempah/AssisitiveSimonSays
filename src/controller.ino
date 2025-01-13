@@ -176,3 +176,20 @@ void loop() {
   }
 }
 
+bool sendPacket(datapacket_t packet) {
+  bool writeSuccess = false;
+
+  controller.stopListening();  // puts the controller into transmit mode
+
+  Serial.println("Attempting write");
+  while (!writeSuccess) {  // true means we got an acknowledgement from the receiver
+    if (controller.write((void *)&packet, sizeof(packet))) {
+      writeSuccess = true;
+    } else {
+      Serial.println("Failed to write to peripheral");
+    }
+  }
+  Serial.println("Successfully wrote to  peripheral");
+
+  return writeSuccess;
+}
