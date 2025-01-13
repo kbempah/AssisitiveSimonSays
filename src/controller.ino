@@ -193,3 +193,21 @@ bool sendPacket(datapacket_t packet) {
 
   return writeSuccess;
 }
+
+datapacket_t getPacket(void) {
+  datapacket_t temp;
+  bool dataRead = false;
+
+  controller.startListening();
+
+  while (!dataRead) {
+    if (controller.available()) {
+      controller.read((void *)&temp, sizeof(temp));
+      dataRead = true;
+    } else {
+      Serial.println("Inside getPacket(): No bytes available to read, checking again");
+    }
+  }
+
+  return temp;
+}
