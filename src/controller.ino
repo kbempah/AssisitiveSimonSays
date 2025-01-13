@@ -250,3 +250,15 @@ void startSinglePlayerMode() {
 
   Serial.println("Exiting startSinglePlayerMode()");
 }
+void resetGameState() {
+  Serial.println("Entering resetGameState()");
+  level = 1;
+  gameOver = true;
+  gameStarted = false;
+  startPressed = false;
+  resetQueued = false;
+  userInputIndex = 0;
+  brightnessIndex = 2;
+  Serial.println("Exiting resetGameState()");
+}
+
